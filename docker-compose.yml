@@ -1,0 +1,42 @@
+version: "3"
+services:
+  web:
+    build: ./opt
+    container_name: "practice-rust"
+    working_dir: "/usr/src/myapp/practice-rust"
+    tty: true
+    volumes:
+      - ./opt:/usr/src/myapp
+    ports:
+      - "8080:8080"
+  frontend:
+    build: ./frontend
+    container_name: "frontend-rust"
+    working_dir: "/usr/src/app/rust-front"
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
+  webserver:
+    build: ./webserver
+    ports:
+      - "80:80"
+    volumes:
+      - ./webserver:/etc/nginx/conf.d
+  db:
+    build: ./dbserver
+    container_name: mysql_host
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todoproject
+      MYSQL_USER: rust
+      MYSQL_PASSWORD: rust
+      TZ: 'Asia/Tokyo'
+    command: mysqld
+    volumes:
+      - ./dbserver/data:/var/lib/mysql
+      - ./dbserver/conf/my.cnf:/etc/my.cnf
+    ports:
+      - 3306:3306
