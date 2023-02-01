@@ -4,3 +4,5 @@ memo.txt
 .DS_Store
 .AppleDouble
 .LSOverride
+
+/dbserver/data
